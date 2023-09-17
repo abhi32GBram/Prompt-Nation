@@ -18,4 +18,3 @@ const Home = () => {
 export default Home 
 
 
-// 1 38 30 

@@ -1,0 +1,239 @@
+solve this error for : 
+MongoServerError: bad auth : authentication failed
+    at Connection.onMessage (D:\My_Programs\VS-Code\Projects\prompt-nation\node_modules\mongoose\node_modules\mongodb\lib\cmap\connection.js:202:26)
+    at MessageStream.<anonymous> (D:\My_Programs\VS-Code\Projects\prompt-nation\node_modules\mongoose\node_modules\mongodb\lib\cmap\connection.js:61:60)
+    at MessageStream.emit (node:events:514:28)
+    at processIncomingData (D:\My_Programs\VS-Code\Projects\prompt-nation\node_modules\mongoose\node_modules\mongodb\lib\cmap\message_stream.js:124:16)
+    at MessageStream._write (D:\My_Programs\VS-Code\Projects\prompt-nation\node_modules\mongoose\node_modules\mongodb\lib\cmap\message_stream.js:33:9)
+    at writeOrBuffer (node:internal/streams/writable:392:12)
+    at _write (node:internal/streams/writable:333:10)
+    at Writable.write (node:internal/streams/writable:337:10)
+    at TLSSocket.ondata (node:internal/streams/readable:766:22)
+    at TLSSocket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:324:12)
+    at readableAddChunk (node:internal/streams/readable:297:9)
+    at Readable.push (node:internal/streams/readable:234:10)
+    at TLSWrap.onStreamRead (node:internal/stream_base_commons:190:23)
+    at TLSWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  ok: 0,
+  code: 8000,
+  codeName: 'AtlasError',
+  connectionGeneration: 0,
+  [Symbol(errorLabels)]: Set(2) { 'HandshakeError', 'ResetPool' }
+}
+MongooseError: Operation `users.findOne()` buffering timed out after 10000ms
+    at Timeout.<anonymous> (D:\My_Programs\VS-Code\Projects\prompt-nation\node_modules\mongoose\lib\drivers\node-mongodb-native\collection.js:186:23)
+    at listOnTimeout (node:internal/timers:569:17)
+    at process.processTimers (node:internal/timers:512:7)
+
+for this code : 
+import NextAuth from "next-auth/next";
+import GoogleProvider from "next-auth/providers/google";
+import User from "@models/user";
+
+import { connectToDB } from "@utils/database";
+const handler = NextAuth({
+    providers:[
+        GoogleProvider({
+            clientId : process.env.GOOGLE_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        })
+    ], 
+    callbacks : {
+        async  session({session}) {
+            const sessionUser  = await User.findOne({
+                email: session.user.email
+            })
+            session.user.id = sessionUser._id.toString()
+    
+            return session
+    
+        },
+        async signIn({profile}) {
+            try {
+                await connectToDB()
+                const userExists = await User.findOne({email: profile.email})
+                if(!userExists)
+                {
+                    await User.create({
+                        email:profile.email,
+                        username : profile.name.replace("","").toLowerCase(),
+                        image : profile.image
+    
+                    })
+                }
+    
+            } catch (error) {
+                console.log(error)
+                return false 
+            }
+        }  
+    }
+})
+
+
+export {handler as GET, handler as POST} ; 
+-----------------------------------------------------------------------------------------------------------------------
+
+add comments wherever need in : 
+"use client";
+import Link from 'next/link'
+import Image from 'next/image'
+import { useState, useEffect } from 'react'
+import { signIn, signOut, useSession, getProviders } from 'next-auth/react'
+import React from 'react'
+
+const NavBar = () => {
+  const {data : session } = useSession();
+  const [providers, setProviders] = useState(null)
+  const [toggleDropDown, settoggleDropDown] = useState(false)
+
+  useEffect(() => {
+    const setUpProviders = async () => {
+      const repsonse = await getProviders()
+      setProviders(repsonse)
+    }
+    setUpProviders()
+  }, [])
+
+  return (
+    <nav className='flex-between w-full mb-16 pt-3'>
+      <Link href="/" className='flex gap-2 flex-center'>
+        <Image src="/assets/images/logo.svg" alt='promptNation Logo' width={30} height={30} className='object-contain'>
+        </Image>
+        <p className='logo_text'>Prompt Nation</p>
+      </Link>
+
+
+      {/* DESKTOP FRIENDLY SECTION  */}
+      <div className='sm:flex hidden'>
+        {session?.user ? (
+          <div className='flex gap-3 md:gap-5'>
+            <Link href="/create-prompt" className='black_btn'> Create Post </Link>
+            <button type='button' onClick={signOut} className='outline_btn'>Sign Out </button>
+            <Link href="/profile">
+              <Image src={session?.user.image} width={37} height={37} className='rounded-full' alt='profile' />
+            </Link>
+          </div>
+        ) :
+          <>
+            {providers &&
+              Object.values(providers).map((providers) => (
+                <button type='button' key={providers.name} onClick={() => signIn(providers.id)} className='black_btn'>Sign In </button>
+              ))}
+          </>
+        }
+      </div>
+
+      {/* MOBILE FRIENDLY SECTION  */}
+      <div className='sm:hidden flex relative'>
+        {session?.user ? (
+          <div className='flex '>
+            <Image src="/assets/images/logo.svg" alt='promptNation Logo' width={30} height={30} className='object-contain' onClick={() => settoggleDropDown((prev) => !prev)} />
+            {toggleDropDown && (
+              <div className='dropdown'>
+                <Link href="/profile" className='dropdown_link' onClick={() => settoggleDropDown(false)}> My Profile </Link>
+                <Link href="/create-prompt" className='dropdown_link' onClick={() => settoggleDropDown(false)}> Create Prompt </Link>
+                <button type='button' onClick={() => { settoggleDropDown(false); signOut() }} className='mt-5w w-full black_btn'>Sign Out </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <>
+            {providers &&
+              Object.values(providers).map((providers) => (
+                <button type='button' key={providers.name} onClick={() => signIn(providers.id)} className='black_btn'>Sign In </button>
+              ))}
+          </>
+        )}
+      </div>
+    </nav>
+  )
+}
+
+export default NavBar
+
+--------------------------------------------------------------------
+
+
+
+solve this error : 
+Error: Invalid src prop (https://lh3.googleusercontent.com/a/ACg8ocJAPVawEsY975SLjaCC5j9047o5OcNb5sIdLbQep0fhcd0=s96-c) on `next/image`, hostname "lh3.googleusercontent.com" is not configured under images in your `next.config.js`
+See more info: https://nextjs.org/docs/messages/next-image-unconfigured-host
+
+for the following code : "use client";
+import Link from 'next/link'
+import Image from 'next/image'
+import { useState, useEffect } from 'react'
+import { signIn, signOut, useSession, getProviders } from 'next-auth/react'
+import React from 'react'
+
+const NavBar = () => {
+  const {data : session } = useSession();
+  const [providers, setProviders] = useState(null)
+  const [toggleDropDown, settoggleDropDown] = useState(false)
+
+  useEffect(() => {
+    const setUpProviders = async () => {
+      const repsonse = await getProviders()
+      setProviders(repsonse)
+    }
+    setUpProviders()
+  }, [])
+
+  return (
+    <nav className='flex-between w-full mb-16 pt-3'>
+      <Link href="/" className='flex gap-2 flex-center'>
+        <Image src="/assets/images/logo.svg" alt='promptNation Logo' width={30} height={30} className='object-contain'>
+        </Image>
+        <p className='logo_text'>Prompt Nation</p>
+      </Link>
+
+
+      {/* DESKTOP FRIENDLY SECTION  */}
+      <div className='sm:flex hidden'>
+        {session?.user ? (
+          <div className='flex gap-3 md:gap-5'>
+            <Link href="/create-prompt" className='black_btn'> Create Post </Link>
+            <button type='button' onClick={signOut} className='outline_btn'>Sign Out </button>
+            <Link href="/profile">
+              <Image src={session?.user.image} width={37} height={37} className='rounded-full' alt='profile' />
+            </Link>
+          </div>
+        ) :
+          <>
+            {providers &&
+              Object.values(providers).map((providers) => (
+                <button type='button' key={providers.name} onClick={() => signIn(providers.id)} className='black_btn'>Sign In </button>
+              ))}
+          </>
+        }
+      </div>
+
+      {/* MOBILE FRIENDLY SECTION  */}
+      <div className='sm:hidden flex relative'>
+        {session?.user ? (
+          <div className='flex '>
+            <Image src="/assets/images/logo.svg" alt='promptNation Logo' width={30} height={30} className='object-contain' onClick={() => settoggleDropDown((prev) => !prev)} />
+            {toggleDropDown && (
+              <div className='dropdown'>
+                <Link href="/profile" className='dropdown_link' onClick={() => settoggleDropDown(false)}> My Profile </Link>
+                <Link href="/create-prompt" className='dropdown_link' onClick={() => settoggleDropDown(false)}> Create Prompt </Link>
+                <button type='button' onClick={() => { settoggleDropDown(false); signOut() }} className='mt-5w w-full black_btn'>Sign Out </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <>
+            {providers &&
+              Object.values(providers).map((providers) => (
+                <button type='button' key={providers.name} onClick={() => signIn(providers.id)} className='black_btn'>Sign In </button>
+              ))}
+          </>
+        )}
+      </div>
+    </nav>
+  )
+}
+
+export default NavBar
