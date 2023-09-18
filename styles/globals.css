@@ -6,6 +6,11 @@
 @tailwind utilities;
 
 
+/* globals.css or globals.scss */
+body {
+  background-color: whitesmoke; /* Your desired background color */
+}
+
 .main {
   width: 100vw;
   min-height: 100vh;
@@ -93,6 +98,10 @@
 
 .green_gradient {
   @apply bg-gradient-to-r from-green-400 to-green-500 bg-clip-text text-transparent;
+}
+
+.purple_gradient {
+  @apply bg-gradient-to-r from-purple-400 to-purple-500 bg-clip-text text-transparent;
 }
 
 .blue_gradient {
