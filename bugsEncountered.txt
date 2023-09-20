@@ -237,3 +237,288 @@ const NavBar = () => {
 }
 
 export default NavBar
+	solve this error :
+	Error [OverwriteModelError]: Cannot overwrite `Prompt` model once compiled.
+		at Mongoose.model (D:\My_Programs\VS-Code\Projects\prompt-nation\node_modules\mongoose\lib\index.js:563:13)
+		at eval (webpack-internal:///(rsc)/./models/prompt.js:28:117)
+		at (rsc)/./models/prompt.js (D:\My_Programs\VS-Code\Projects\prompt-nation\.next\server\app\api\prompt\route.js:62:1)
+		at __webpack_require__ (D:\My_Programs\VS-Code\Projects\prompt-nation\.next\server\webpack-runtime.js:33:43)
+		at eval (webpack-internal:///(rsc)/./app/api/prompt/route.js:6:72)
+		at (rsc)/./app/api/prompt/route.js (D:\My_Programs\VS-Code\Projects\prompt-nation\.next\server\app\api\prompt\route.js:52:1)
+		at __webpack_require__ (D:\My_Programs\VS-Code\Projects\prompt-nation\.next\server\webpack-runtime.js:33:43)
+		at eval (webpack-internal:///(rsc)/./node_modules/next/dist/build/webpack/loaders/next-app-loader.js?name=app%2Fapi%2Fprompt%2Froute&page=%2Fapi%2Fprompt%2Froute&appPaths=&pagePath=private-next-app-dir%2Fapi%2Fprompt%2Froute.js&appDir=D%3A%5CMy_Programs%5CVS-Code%5CProjects%5Cprompt-nation%5Capp&pageExtensions=tsx&pageExtensions=ts&pageExtensions=jsx&pageExtensions=js&rootDir=D%3A%5CMy_Programs%5CVS-Code%5CProjects%5Cprompt-nation&isDev=true&tsconfigPath=tsconfig.json&basePath=&assetPrefix=&nextConfigOutput=&preferredRegion=&middlewareConfig=e30%3D!:16:126)
+		at (rsc)/./node_modules/next/dist/build/webpack/loaders/next-app-loader.js?name=app%2Fapi%2Fprompt%2Froute&page=%2Fapi%2Fprompt%2Froute&appPaths=&pagePath=private-next-app-dir%2Fapi%2Fprompt%2Froute.js&appDir=D%3A%5CMy_Programs%5CVS-Code%5CProjects%5Cprompt-nation%5Capp&pageExtensions=tsx&pageExtensions=ts&pageExtensions=jsx&pageExtensions=js&rootDir=D%3A%5CMy_Programs%5CVS-Code%5CProjects%5Cprompt-nation&isDev=true&tsconfigPath=tsconfig.json&basePath=&assetPrefix=&nextConfigOutput=&preferredRegion=&middlewareConfig=e30%3D! (D:\My_Programs\VS-Code\Projects\prompt-nation\.next\server\app\api\prompt\route.js:42:1)
+		at __webpack_require__ (D:\My_Programs\VS-Code\Projects\prompt-nation\.next\server\webpack-runtime.js:33:43)
+		at __webpack_exec__ (D:\My_Programs\VS-Code\Projects\prompt-nation\.next\server\app\api\prompt\route.js:632:39)
+		at D:\My_Programs\VS-Code\Projects\prompt-nation\.next\server\app\api\prompt\route.js:633:28
+		at Object.<anonymous> (D:\My_Programs\VS-Code\Projects\prompt-nation\.next\server\app\api\prompt\route.js:636:3)
+		at Module._compile (node:internal/modules/cjs/loader:1256:14)
+		at Module._extensions..js (node:internal/modules/cjs/loader:1310:10)
+		at Module.load (node:internal/modules/cjs/loader:1119:32)
+		at Module._load (node:internal/modules/cjs/loader:960:12)
+		at Module.require (node:internal/modules/cjs/loader:1143:19)
+		at require (node:internal/modules/cjs/helpers:110:18)
+		at requirePage (D:\My_Programs\VS-Code\Projects\prompt-nation\node_modules\next\dist\server\require.js:112:75)
+		at D:\My_Programs\VS-Code\Projects\prompt-nation\node_modules\next\dist\server\load-components.js:80:84
+		at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+		at async loadComponentsImpl (D:\My_Programs\VS-Code\Projects\prompt-nation\node_modules\next\dist\server\load-components.js:80:26)
+		at async DevServer.findPageComponentsImpl (D:\My_Programs\VS-Code\Projects\prompt-nation\node_modules\next\dist\server\next-server.js:439:36) {
+	  digest: undefined
+	}
+
+	for this code:
+
+	'use client'
+	import React from 'react'
+
+	import { useState } from 'react'
+	import { useEffect } from 'react'
+
+	import  PromptCard from './PromptCard'
+
+	const PromptCardList = ({data, handleTagClick}) => { 
+	  return(
+		<div className='mt-16 prompt_layout'>
+			{data.map((post ) => { 
+			  <PromptCard key={post._id} post={post} handleTagClick={handleTagClick}/>
+			})}
+		</div>
+	  )
+	}
+	const Feed = () => {
+
+	  const [searchText, setsearchText] = useState('')
+	  const [posts, setposts] = useState([])
+	  const handleSearchChange = (e) => {
+
+	  }
+	  useEffect(()=>{
+		const fetchPosts = async () => { 
+		  const reponse  = await fetch('/api/prompt')
+		  const data = await reponse.json()
+
+		  setposts(data)
+		}
+		fetchPosts()
+
+	  },[])
+	  return (
+		<section className='feed'>
+		  <form className='relative w-full flex-center '>
+			<input type='text' placeholder='Search for Prompts, Tags, Usernames...' value={searchText} onChange={handleSearchChange} required className='search_input peer'/>
+		  </form>
+		  <PromptCardList  data={posts} handleTagClick={() => {
+
+		  }}/>
+		</section>
+	  )
+	}
+
+	export default Feed
+
+	---------
+
+	fix any errors from this code :
+	'use client'
+	import React from 'react'
+
+	import { useState } from 'react'
+	import { useEffect } from 'react'
+
+	import  PromptCard from './PromptCard'
+
+	const PromptCardList = ({data, handleTagClick}) => { 
+	  return(
+		<div className='mt-16 prompt_layout'>
+			{data.map((post ) => { 
+			  <PromptCard key={post._id} post={post} handleTagClick={handleTagClick}/>
+			})}
+		</div>
+	  )
+	}
+	const Feed = () => {
+
+	  const [searchText, setsearchText] = useState('')
+	  const [posts, setposts] = useState([])
+	  const handleSearchChange = (e) => {
+
+	  }
+	  useEffect(()=>{
+		const fetchPosts = async () => { 
+		  const reponse  = await fetch('/api/prompt')
+		  const data = await reponse.json()
+
+		  setposts(data)
+		}
+		fetchPosts()
+
+	  },[])
+	  return (
+		<section className='feed'>
+		  <form className='relative w-full flex-center '>
+			<input type='text' placeholder='Search for Prompts, Tags, Usernames...' value={searchText} onChange={handleSearchChange} required className='search_input peer'/>
+		  </form>
+		  <PromptCardList  data={posts} handleTagClick={() => {
+
+		  }}/>
+		</section>
+	  )
+	}
+
+	export default Feed
+
+
+	=================
+
+	getting the following error :
+
+	 OverwriteModelError: Cannot overwrite `Prompt` model once compiled.
+	 
+	 and 
+	 
+	 error Error [OverwriteModelError]: Cannot overwrite `Prompt` model once compiled.
+		at Mongoose.model (D:\My_Programs\VS-Code\Projects\prompt-nation\node_modules\mongoose\lib\index.js:563:13)
+		at eval (webpack-internal:///(rsc)/./models/prompt.js:28:117)
+		at (rsc)/./models/prompt.js (D:\My_Programs\VS-Code\Projects\prompt-nation\.next\server\app\api\prompt\route.js:62:1)
+		at __webpack_require__ (D:\My_Programs\VS-Code\Projects\prompt-nation\.next\server\webpack-runtime.js:33:43)
+		at eval (webpack-internal:///(rsc)/./app/api/prompt/route.js:5:72)
+		at (rsc)/./app/api/prompt/route.js (D:\My_Programs\VS-Code\Projects\prompt-nation\.next\server\app\api\prompt\route.js:52:1)
+		at __webpack_require__ (D:\My_Programs\VS-Code\Projects\prompt-nation\.next\server\webpack-runtime.js:33:43)
+		at eval (webpack-internal:///(rsc)/./node_modules/next/dist/build/webpack/loaders/next-app-loader.js?name=app%2Fapi%2Fprompt%2Froute&page=%2Fapi%2Fprompt%2Froute&appPaths=&pagePath=private-next-app-dir%2Fapi%2Fprompt%2Froute.js&appDir=D%3A%5CMy_Programs%5CVS-Code%5CProjects%5Cprompt-nation%5Capp&pageExtensions=tsx&pageExtensions=ts&pageExtensions=jsx&pageExtensions=js&rootDir=D%3A%5CMy_Programs%5CVS-Code%5CProjects%5Cprompt-nation&isDev=true&tsconfigPath=tsconfig.json&basePath=&assetPrefix=&nextConfigOutput=&preferredRegion=&middlewareConfig=e30%3D!:16:126)
+		at (rsc)/./node_modules/next/dist/build/webpack/loaders/next-app-loader.js?name=app%2Fapi%2Fprompt%2Froute&page=%2Fapi%2Fprompt%2Froute&appPaths=&pagePath=private-next-app-dir%2Fapi%2Fprompt%2Froute.js&appDir=D%3A%5CMy_Programs%5CVS-Code%5CProjects%5Cprompt-nation%5Capp&pageExtensions=tsx&pageExtensions=ts&pageExtensions=jsx&pageExtensions=js&rootDir=D%3A%5CMy_Programs%5CVS-Code%5CProjects%5Cprompt-nation&isDev=true&tsconfigPath=tsconfig.json&basePath=&assetPrefix=&nextConfigOutput=&preferredRegion=&middlewareConfig=e30%3D! (D:\My_Programs\VS-Code\Projects\prompt-nation\.next\server\app\api\prompt\route.js:42:1)
+		at __webpack_require__ (D:\My_Programs\VS-Code\Projects\prompt-nation\.next\server\webpack-runtime.js:33:43)
+		at __webpack_exec__ (D:\My_Programs\VS-Code\Projects\prompt-nation\.next\server\app\api\prompt\route.js:632:39)
+		at D:\My_Programs\VS-Code\Projects\prompt-nation\.next\server\app\api\prompt\route.js:633:28
+		at Object.<anonymous> (D:\My_Programs\VS-Code\Projects\prompt-nation\.next\server\app\api\prompt\route.js:636:3)
+		at Module._compile (node:internal/modules/cjs/loader:1256:14)
+		at Module._extensions..js (node:internal/modules/cjs/loader:1310:10)
+		at Module.load (node:internal/modules/cjs/loader:1119:32)
+		at Module._load (node:internal/modules/cjs/loader:960:12)
+		at Module.require (node:internal/modules/cjs/loader:1143:19)
+		at require (node:internal/modules/cjs/helpers:110:18)
+		at requirePage (D:\My_Programs\VS-Code\Projects\prompt-nation\node_modules\next\dist\server\require.js:112:75)
+		at D:\My_Programs\VS-Code\Projects\prompt-nation\node_modules\next\dist\server\load-components.js:80:84
+		at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+		at async loadComponentsImpl (D:\My_Programs\VS-Code\Projects\prompt-nation\node_modules\next\dist\server\load-components.js:80:26)
+		at async DevServer.findPageComponentsImpl (D:\My_Programs\VS-Code\Projects\prompt-nation\node_modules\next\dist\server\next-server.js:439:36) {
+	  digest: undefined
+	  
+	  for the following code : 
+	  
+	  import mongoose ,{Schema,models,model} from "mongoose";
+
+	const promptSchema = new Schema({
+		creator: {
+			type:mongoose.Schema.Types.ObjectId,
+			ref:'User',
+		},
+		prompt : {
+			type: String,
+			require: [true,'Prompt is Required'],
+		},
+		tag:{
+			type:String,
+			required:[true,'Tag is Required']
+
+		}
+	})
+
+	const Prompt = model.Prompt || model('Prompt',promptSchema)
+
+	export default Prompt
+
+
+	this is occuring when i am logged in properly but upon creation of a new post 
+
+	+++++++
+
+	solve the following error :
+	TypeError: Cannot read properties of undefined (reading 'image')
+
+	for this code : 
+
+	"use client"
+
+	import React from 'react'
+	import {useState} from  'react'
+	import Image from 'next/image'
+	import { useSession } from 'next-auth/react'
+
+	import { usePathname, useRouter } from 'next/navigation'
+
+
+
+	const PromptCard = ({post, handleTagClick, handleEdit,handleDelete }) => {
+	  return (
+		<div className='prompt_card'>
+		  <div className='flex justify-between items-start gap-5'>
+			<div>
+			  <Image src={post.creator.image} alt='User_Image' width={40} height={40} className='rounded-full object-contain ' />
+			</div>
+		  </div>
+		</div>
+	  )
+	}
+
+	export default PromptCard
+
+	----------34343434343
+
+	format this : 
+	import React from 'react'
+
+	import PromptCard from './PromptCard'
+
+
+	const Profile = ({name,desc,data,handleEdit,handleDelete}) => {
+	  return (
+		<section className='w-full'>
+		  <h1 className='head_text text-left'>
+			<span className='blue_gradient'>{name} Profile</span>
+		  </h1>
+		  <p className='desc text-left'>{desc}</p>
+		  <div className='mt-10 prompt_layout'>
+			{data.map((post) => ( 
+			  <PromptCard key={post._id} post={post} handleEdit={() => handleEdit && handleEdit(post)} handleDelete={() => handleDelete && handleDelete(post)}/>
+			))}
+		</div>
+		</section>
+	  )
+	}
+
+	export default Profile
+
+	--------23232233
+
+	resolve this error : 
+
+	Warning: Prop `className` did not match. Server: "null" Client: "head_text text-left"
+
+	in this code :
+	 
+	 import React from 'react';
+	import PromptCard from './PromptCard';
+
+	const Profile = ({ name, desc, data, handleEdit, handleDelete }) => {
+	  return (
+		<section className='w-full'>
+		  <h1 className='head_text text-left'>
+			<span className='blue_gradient'>{name} Profile</span>
+		  </h1>
+		  <p className='desc text-left'>{desc}</p>
+		  <div className='mt-10 prompt_layout'>
+			{data.map((post) => (
+			  <PromptCard
+				key={post._id}
+				post={post}
+				handleEdit={() => handleEdit && handleEdit(post)}
+				handleDelete={() => handleDelete && handleDelete(post)}
+			  />
+			))}
+		  </div>
+		</section>
+	  );
+	};
+
+	export default Profile;
+

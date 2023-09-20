@@ -2,40 +2,53 @@
 import React, { useEffect }  from 'react'
 
 import { useState } from 'react'
-import { useSession } from 'next-auth/react'
 import { useRouter , useSearchParams } from 'next/navigation'
+
+// import { useSession } from 'next-auth/react' NOT NEEDED ANYMORE 
 
 import Form from '@components/Form'
 
 const UpdatePrompt = () => {
     const router = useRouter()
-    const {data :session} = useSession()
+     // const {data :session} = useSession()   NOT NEEDED ANYMORE 
 
     const [submitting, setIsSubmitting] = useState(false)
     const [post, setpost] = useState({prompt : '',tag:''})
 
     const  searchParams = useSearchParams()
-    const promptId = searchParams.get('id')
+    const promptId = searchParams.get("id")
 
-    useEffect(() => {
-        
+    useEffect(() => 
+    {
+        const getPromptDetails = async () => 
+        {
+            const response = await fetch(`/api/prompt/${promptId}`)
+            const data =  await response.json()
 
+            setpost({
+                prompt : data.prompt,
+                tag : data.tag
+            })
+
+            if(promptId) getPromptDetails()
+        }
     },[promptId])
 
-    const UpdatePrompt = async (e) => {
+    const updatePrompt = async (e) => {
         e.preventDefault()
         setIsSubmitting(true)
+
+        if(!promptId) return alert("Prompt ID Not Found !! ")
         
         try {
-            const responce = await fetch('/api/prompt/new',{
-                method:'POST',
+            const response = await fetch(`/api/prompt/${promptId}`,{
+                method:'PATCH',
                 body:JSON.stringify({
                     prompt:post.prompt,
-                    userId:session?.user.id,
                     tag:post.tag
                 })
             }) 
-            if(responce.ok) {
+            if(response.ok) {
                 router.push('/')
             }
 
@@ -45,10 +58,9 @@ const UpdatePrompt = () => {
         {
             setIsSubmitting(false)
         }
-    }
+    }  
     return (
-    
-    <Form type="Create" post={post} setpost={setpost} submitting={submitting} handleSubmit={UpdatePrompt}/>
+    <Form type='Edit' post={post} setpost={setpost} submitting={submitting} handleSubmit={updatePrompt}/>
 )}
 
 export default UpdatePrompt
