@@ -35,3 +35,6 @@ const RootLayout = ({ children }) => {
 };
 
 export default RootLayout;
+
+
+// 2023-09-20T23:55:51.225Z
