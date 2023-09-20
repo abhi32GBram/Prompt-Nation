@@ -522,3 +522,555 @@ export default NavBar
 
 	export default Profile;
 
+jfdjfkdfjdkfjdfkdjkfdfkdfkfjkdfjdkjk 
+
+resolve the following error :
+Unhandled Runtime Error
+Error: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://reactjs.org/link/invalid-hook-call for tips about how to debug and fix this problem.
+
+for this code :
+
+"use client"
+import React from 'react'
+import { useState, useEffect } from 'react'
+import { UseSessionOptions, useSession } from 'next-auth/react'
+import  {useRouter} from 'next/navigation'
+
+import Profile from '@components/profile'
+
+const MyProfile = () => {
+    const {data : session} = useSession() 
+
+    const [posts, setposts] = useState([])
+    useEffect(()=>{
+        const fetchPosts = async () => { 
+        const reponse  = await fetch(`/api/users/${session?.user.id}/posts`)
+        const data = await reponse.json()
+
+        const router = useRouter()
+    
+        setposts(data)
+        }
+        if(session?.user.id)fetchPosts()
+
+    
+    },[])
+
+    const handleEdit = (post) => {
+        router.push(`/update-prompt?id=${post._id}`) 
+
+    }
+
+    const handleDelete = async (post) => {
+
+    }
+    return (
+        <Profile name="My " desc="Welcome to your Personalized Profile Page " data={posts} handleEdit={handleEdit} handleDelete={handleDelete}/>
+    )
+}
+
+export default MyProfile
+
+--------=-=-=-=-=-=-=
+
+resolve the following error : 
+
+Unhandled Runtime Error
+SyntaxError: Unexpected end of JSON input
+
+
+for this code : 
+
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+
+import Form from "@components/Form";
+
+const UpdatePrompt = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const promptId = searchParams.get("id");
+
+  const [post, setPost] = useState({ prompt: "", tag: "", });
+  const [submitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    const getPromptDetails = async () => {
+      const response = await fetch(`/api/prompt/${promptId}`);
+      const data = await response.json();
+
+      setPost({
+        prompt: data.prompt,
+        tag: data.tag,
+      });
+    };
+
+    if (promptId) getPromptDetails();
+  }, [promptId]);
+
+  const updatePrompt = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    if (!promptId) return alert("Missing PromptId!");
+
+    try {
+      const response = await fetch(`/api/prompt/${promptId}`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          prompt: post.prompt,
+          tag: post.tag,
+        }),
+      });
+
+      if (response.ok) {
+        router.push("/");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <Form
+      type='Edit'
+      post={post}
+      setPost={setPost}
+      submitting={submitting}
+      handleSubmit={updatePrompt}
+    />
+  );
+};
+
+export default UpdatePrompt;
+
+
+00000000000000000000000000000000000
+
+upon trying to click the edit button on a prompt card, the edit page should appear and the fields should be auto populated with the original prompt . But it isnt doing so  for the following code :
+'use client'
+import React, { useEffect }  from 'react'
+
+import { useState } from 'react'
+import { useRouter , useSearchParams } from 'next/navigation'
+
+// import { useSession } from 'next-auth/react' NOT NEEDED ANYMORE 
+
+import Form from '@components/Form'
+
+const UpdatePrompt = () => {
+    const router = useRouter()
+     // const {data :session} = useSession()   NOT NEEDED ANYMORE 
+
+    const [submitting, setIsSubmitting] = useState(false)
+    const [post, setpost] = useState({prompt : '',tag:''})
+
+    const  searchParams = useSearchParams()
+    const promptId = searchParams.get('id')
+
+    useEffect(() => {
+        const getPromptDetails = async () => {
+            const response = await fetch(`/api/prompts/${promptId}`)
+            const data =  await response.json()
+
+            setpost({
+                prompt : data.prompt,
+                tag : data.tag
+            })
+
+            if(promptId) getPromptDetails()
+        }
+    },[promptId])
+
+    const updatePrompt = async (e) => {
+        e.preventDefault()
+        setIsSubmitting(true)
+
+        if(!promptId) return alert("Prompt ID Not Found !! ")
+        
+        try {
+            const response = await fetch(`/api/prompt/${promptId}`,{
+                method:'PATCH',
+                body:JSON.stringify({
+                    prompt:post.prompt,
+                    tag:post.tag
+                })
+            }) 
+            if(response.ok) {
+                router.push('/')
+            }
+
+        } catch (error) {
+            console.log(error)
+        }finally
+        {
+            setIsSubmitting(false)
+        }
+    }  
+    return (
+    <Form type="Edit" post={post} setpost={setpost} submitting={submitting} handleSubmit={updatePrompt}/>
+)}
+
+export default UpdatePrompt
+
+give any solutions 
+
+
+1211212122121112121
+
+resolve any issues in the following : 
+
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+
+import Form from "@components/Form";
+
+const UpdatePrompt = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const promptId = searchParams.get("id");
+
+  const [post, setPost] = useState({ prompt: "", tag: "", });
+  const [submitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    const getPromptDetails = async () => {
+      const response = await fetch(`/api/prompt/${promptId}`);
+      const data = await response.json();
+
+      setPost({
+        prompt: data.prompt,
+        tag: data.tag,
+      });
+    };
+
+    if (promptId) getPromptDetails();
+  }, [promptId]);
+
+  const updatePrompt = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    if (!promptId) return alert("Missing PromptId!");
+
+    try {
+      const response = await fetch(`/api/prompt/${promptId}`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          prompt: post.prompt,
+          tag: post.tag,
+        }),
+      });
+
+      if (response.ok) {
+        router.push("/");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <Form
+      type='Edit'
+      post={post}
+      setPost={setPost}
+      submitting={submitting}
+      handleSubmit={updatePrompt}
+    />
+  );
+};
+
+export default UpdatePrompt;
+
+
+-=-=-=-=-=-=-=-=-=
+
+are these api endopints fine  :
+import Prompt from "@models/prompt";
+import { connectToDB } from "@utils/database";
+import { Response } from "next/dist/client/components/redirect";
+
+// GET Endpoint for Retrieving the Prompts from the User Profile 
+export const GET = async (request, { params }) => {
+    try {
+        await connectToDB();
+
+        // Find the prompt by its ID and populate the creator field
+        const prompt = await Prompt.findById(params.id).populate('creator');
+        if (!prompt) return new Response("OOP's Prompt Not Found", { status: 404 });
+
+        // Return the prompt data as JSON with a 200 status code
+        return new Response(JSON.stringify(prompt), { status: 200 });
+    } catch (error) {
+        // Return an error response with a 500 status code if there's an issue
+        return new Response("Failed to fetch the prompt", { status: 500 });
+    }
+}
+
+// PATCH Endpoint for Updating/Editing the Prompt
+export const PATCH = async (request, { params }) => {
+    const { prompt, tag } = await request.json();
+
+    try {
+        await connectToDB();
+        const existingPrompt = await Prompt.findById(params.id);
+
+        if (!existingPrompt) return new Response("Sorry, Prompt Not Found", { status: 404 });
+
+        // Update the prompt with new data
+        existingPrompt.prompt = prompt;
+        existingPrompt.tag = tag;
+
+        await existingPrompt.save();
+
+        // Return the updated prompt data as JSON with a 200 status code
+        return new Response(JSON.stringify(existingPrompt), { status: 200 });
+    } catch (error) {
+        // Return an error response with a 500 status code if there's an issue
+        return new Response("Failed to update the prompt", { status: 500 });
+    }
+}
+
+// DELETE Endpoint for Deleting the Prompt Card 
+export const DELETE = async (request, { params }) => {
+    try {
+        await connectToDB();
+        
+        // Find and remove the prompt by its ID
+        await Prompt.findByIdAndRemove(params.id);
+
+        // Return a success message with a 200 status code
+        return new Response("Prompt Deleted Successfully", { status: 200 });
+    } catch (error) {
+        // Return an error response with a 500 status code if there's an issue
+        return new Response("OOP's Failed to Delete Prompt", { status: 500 });
+    }
+}
+------------------454954854958495489549849
+
+	getting this error: 
+
+	page.jsx:44     PATCH http://localhost:3000/api/prompt/undefined net::ERR_ABORTED 500 (Internal Server Error)
+	updatePrompt @ page.jsx:44
+	callCallback @ react-dom.development.js:19443
+	invokeGuardedCallbackImpl @ react-dom.development.js:19492
+	invokeGuardedCallback @ react-dom.development.js:19567
+	invokeGuardedCallbackAndCatchFirstError @ react-dom.development.js:19581
+	executeDispatch @ react-dom.development.js:30621
+	processDispatchQueueItemsInOrder @ react-dom.development.js:30653
+	processDispatchQueue @ react-dom.development.js:30666
+	dispatchEventsForPlugins @ react-dom.development.js:30677
+	eval @ react-dom.development.js:30867
+	batchedUpdates$1 @ react-dom.development.js:23747
+	batchedUpdates @ react-dom.development.js:27583
+	dispatchEventForPluginEventSystem @ react-dom.development.js:30866
+	dispatchEvent @ react-dom.development.js:28639
+	dispatchDiscreteEvent @ react-dom.development.js:28610
+
+	for this code : 
+
+	'use client'
+	import React, { useEffect }  from 'react'
+
+	import { useState } from 'react'
+	import { useRouter , useSearchParams } from 'next/navigation'
+
+	// import { useSession } from 'next-auth/react' NOT NEEDED ANYMORE 
+
+	import Form from '@components/Form'
+
+	const UpdatePrompt = () => {
+		const router = useRouter()
+		 // const {data :session} = useSession()   NOT NEEDED ANYMORE 
+
+		const [submitting, setIsSubmitting] = useState(false)
+		const [post, setpost] = useState({prompt :"",tag:""})
+
+		const  searchParams = useSearchParams()
+		const promptId = searchParams.get("id")
+
+		useEffect(() => 
+		{
+			const getPromptDetails = async () => 
+			{
+				const response = await fetch(`/api/prompts/${promptId}`)
+				const data =  await response.json()
+
+				setpost({
+					prompt : data.prompt,
+					tag : data.tag
+				})
+
+				if(promptId) getPromptDetails()
+			}
+		},[promptId])
+
+		const updatePrompt = async (e) => {
+			e.preventDefault()
+			setIsSubmitting(true)
+
+			if(!promptId) return alert("Prompt ID Not Found !! ")
+			
+			try {
+				const response = await fetch(`/api/prompt/${promptId}`,{
+					method:'PATCH',
+					body:JSON.stringify({
+						prompt:post.prompt,
+						tag:post.tag
+					})
+				}) 
+				if(response.ok) {
+					router.push('/')
+				}
+
+			} catch (error) {
+				console.log(error)
+			}finally
+			{
+				setIsSubmitting(false)
+			}
+		}  
+		return (
+		<Form type='Edit' post={post} setpost={setpost} submitting={submitting} handleSubmit={updatePrompt}/>
+	)}
+
+	export default UpdatePrompt
+
+
+	it is using this api endopint : 
+
+	export const PATCH = async (request, { params }) => {
+		const { prompt, tag } = await request.json();
+
+		try {
+			await connectToDB();
+			const existingPrompt = await Prompt.findById(params._id);
+
+			if (!existingPrompt) {
+				return new Response("Prompt Not Found", { status: 404 });
+			}
+
+			// Validate and update the prompt with new data
+			if (prompt) {
+				existingPrompt.prompt = prompt;
+			}
+			if (tag) {
+				existingPrompt.tag = tag;
+			}
+
+			const updatedPrompt = await existingPrompt.save();
+
+			return new Response(JSON.stringify(updatedPrompt), { status: 200 });
+		} catch (error) {
+			console.error(error);
+			return new Response("Failed to update the prompt", { status: 500 });
+		}
+	}
+
+
+45549585948594895485459485 
+
+the api url - http://localhost:3000/api/prompt/65082f1d29607de3a854b00a is a sample propmt id from the db which is working perfectly upon hitting.
+Yet for this code the api is unable to fetch the prompt id and update the prompt hence giving - PATCH http://localhost:3000/api/prompt/undefined net::ERR_ABORTED 500 (Internal Server Error)
+
+This is the code : 
+
+'use client'
+import React, { useEffect }  from 'react'
+
+import { useState } from 'react'
+import { useRouter , useSearchParams } from 'next/navigation'
+
+// import { useSession } from 'next-auth/react' NOT NEEDED ANYMORE 
+
+import Form from '@components/Form'
+
+const UpdatePrompt = () => {
+    const router = useRouter()
+     // const {data :session} = useSession()   NOT NEEDED ANYMORE 
+
+    const [submitting, setIsSubmitting] = useState(false)
+    const [post, setpost] = useState({prompt :"",tag:""})
+
+    const  searchParams = useSearchParams()
+    const promptId = searchParams.get("id")
+
+    useEffect(() => 
+    {
+        const getPromptDetails = async () => 
+        {
+            const response = await fetch(`/api/prompts/${promptId}`)
+            const data =  await response.json()
+
+            setpost({
+                prompt : data.prompt,
+                tag : data.tag
+            })
+
+            if(promptId) getPromptDetails()
+        }
+    },[promptId])
+
+    const updatePrompt = async (e) => {
+        e.preventDefault()
+        setIsSubmitting(true)
+
+        if(!promptId) return alert("Prompt ID Not Found !! ")
+        
+        try {
+            const response = await fetch(`/api/prompt/${promptId}`,{
+                method:'PATCH',
+                body:JSON.stringify({
+                    prompt:post.prompt,
+                    tag:post.tag
+                })
+            }) 
+            if(response.ok) {
+                router.push('/')
+            }
+
+        } catch (error) {
+            console.log(error)
+        }finally
+        {
+            setIsSubmitting(false)
+        }
+    }  
+    return (
+    <Form type='Edit' post={post} setpost={setpost} submitting={submitting} handleSubmit={updatePrompt}/>
+)}
+
+export default UpdatePrompt
+
+and this is the record from the db 
+
+{
+"_id": "65082f1d29607de3a854b00a",
+"creator": {
+"_id": "650579c9b4356c64ba62e40a",
+"email": "abhiram.suradkar@gmail.com",
+"username": "abhiramsuradkar",
+"image": "https://lh3.googleusercontent.com/a/ACg8ocJAPVawEsY975SLjaCC5j9047o5OcNb5sIdLbQep0fhcd0=s96-c",
+"__v": 0
+},
+"prompt": "write me a poem for the soldiers of ww2",
+"tag": "#poetry ",
+"__v": 0
+}
+
+34347364736746374367643
+
+how can i test what is the response of this - const promptId = searchParams.get("id")
