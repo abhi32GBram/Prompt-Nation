@@ -1,4 +1,4 @@
-'use client'
+"use client"
 import React, { useEffect, useRef } from "react";
 import Feed from '@components/Feed'
 import gsap from "gsap";
@@ -70,7 +70,7 @@ const Home = () => {
       <h1 className="head_text text-center" ref={titleRef}>
         Discover & Share
         <br className="max-md:hidden" />
-        <span className="orange_gradient text-center">Powerful Prompts</span>
+        <span className="orange_gradient text-center">Cool Prompts</span>
       </h1>
       <p className="desc text-center" ref={subtitleRef}>
         Prompt Nation is a Collaborative Environment for the World to Discover, Create, Share Useful & Creative Prompts
